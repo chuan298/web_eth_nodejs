@@ -157,7 +157,7 @@
                         </div>
                         <div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" style="width: <%= balance / user.minimum_payout * 100 %>%"
-                                aria-valuenow="<%= balance / user.minimum_payout * 100 %>" aria-valuemin="0" aria-valuemax="100"></div>
+                                aria-valuenow="<%= balance / user.minimum_payout * 100 %>" aria-valuemin="0" aria-valuemax="100"><%= balance / user.minimum_payout * 100 %>%</div>
                         </div>
                     </div>
 
@@ -391,7 +391,8 @@
                         console.log(result)
                         alert(result);
                     }
-                    }); 
+                });
+                $("#submit").prop("disabled", false);
             })
             ////
 

@@ -22,8 +22,7 @@ var UserSchema = new mongoose.Schema({
     // _id: mongoose.Schema.Types.ObjectId,
     wallet: String,
     email: String,
-    minimum_payout: Number,
-    telegramID: String,
+    minimum_payout: Number
 });
 var LedgerSchema = new mongoose.Schema({
     // _id: mongoose.Schema.Types.ObjectId,
