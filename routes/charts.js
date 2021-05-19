@@ -27,12 +27,12 @@ router.get('/:id', async function (req, res, callback) {
     }
     average_6h = total / number_;
 
+    const colors = ["#228B22", "#00FFFF", "#7FFFD4", "#A52A2A", "#8A2BE2", "#0000FF", "#2F4F4F", "#800000"]
     const balance = ledger ? ledger.reduce((a, b) => a + (b.increase - b.decrease || 0), 0) : 0;
-    console.log({balance})
     var harvesters = []
     var harvesters = [...new Set(mining.map(item => item.harvester))]
-    harvesters = harvesters.map(item => {
-      return {harvester: item, total_plots: 0}
+    harvesters = harvesters.map((item, index) => {
+      return {harvester: item, total_plots: 0, color: colors[index % colors.length]}
     })
     for(let i = 0; i<harvesters.length; i++){
       for(let j=0; j<mining.length; j++){
@@ -41,14 +41,25 @@ router.get('/:id', async function (req, res, callback) {
         }
       }
     }
+    
+    var mining_histories = mining.map(item => {
+      return {time: new Date(item.time), amount: item.total_plots}
+    }).sort((a, b) => new Date(b.time) - new Date(a.time));
 
+
+    var payments = ledger.filter(item => item.increase > 0 && item.tran_id !== "")
+    payments = payments.map(item => {
+      return {time: new Date(item.time), amount: item.increase - item.decrease}
+    })
+    var total_paid = payments ? payments.reduce((a, b) => a + (b.increase - b.decrease || 0), 0) : 0;
     const data_chart = report_sort.reverse().map((item) => [new Date(item.time).getTime(), item.total_plots])
     res.render('dashboard/barchart', {
       title: 'My First Bar Chart',
       datai: JSON.stringify([]),
       labeli: JSON.stringify([]),
       harvesters: harvesters,
-      user: user[0], ledger: ledger[0], last_report: report_sort[0].total_plots, average_6h, balance: balance, data_chart: JSON.stringify(data_chart)
+      user: user[0], ledger: ledger[0], last_report: report_sort[0].total_plots, average_6h, balance: balance, data_chart: JSON.stringify(data_chart),
+      total_paid, payments, mining_histories
     });
   }
   catch (e) {
