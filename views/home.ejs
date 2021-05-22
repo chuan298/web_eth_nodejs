@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        input[type="text"]::placeholder {
+
+            /* Firefox, Chrome, Opera */
+            text-align: center;
+        }
+
+        table,
+        td,
+        th {
+            border: 1px solid #3CAA5B;
+            padding: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td:nth-child(1) {
+            width: 50%;
+        }
+
+
+        td:nth-child(2) {
+            width: 50%;
+        }
+
+        .btn:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+    <title>Pool Chiacoinvn</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- <img src="/image/logo.jpg" class="rounded mx-auto d-block" alt="..."> -->
+        <h1 style="text-align: center;  margin: 20px;">Well Come To ChiacoinVN Pool</h1>
+        <div>
+
+            <div style="border: 1px solid #3CAA5B">
+                <div style=" display: flex; align-items: center; justify-content: center; background-color: #3CAA5B; color: white; padding: 8px;"
+                    class="text-center">
+                    <img src="/image/logo1.png" class="rounded d-block" style="height: 50px; margin-right: 8px;">
+                    <h2 style="font-size: x-large;">Chia</h2>
+                </div>
+                <br />
+                <div style="padding: 6px;">
+                    <table>
+                        <tr>
+                            <td>Pool Netspace</td>
+                            <td><%= poolnetspace %> </td>
+
+                        </tr>
+                        <tr>
+                            <td>Miners count</td>
+                            <td><%= minings_count %> </td>
+
+                        </tr>
+                        <tr>
+                            <td>Price</td>
+                            <td><%= price %> </td>
+
+                        </tr>
+                    </table>
+                    <br />
+                    <div style="border: 1px solid #3CAA5B; background-color: rgba(0, 0, 0, 0.2);">
+                        <ul>
+                            <li>Payout 5 - 20 XCH</li>
+                            <li>Algorithm Post</li>
+                        </ul>
+                    </div>
+                    <br />
+                    <!-- <form id="form" action=""> -->
+                    <div>
+                        <input type="text" class="form-control is-valid" id="input_data"
+                            placeholder="Enter your wallet..."
+                            style="width: 100%; border: 1px solid #3CAA5B; text-align: center;">
+                    </div>
+                    <br />
+                    <div class="col text-center">
+                        <!-- <input type="submit" id="overview" class="btn btn-success" value="OverView"> -->
+                        <button type="button" id="overview" class="btn btn-success"> OverView</button>
+                    </div>
+                    <br />
+                    <!-- </form> -->
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <br />
+        <!-- <footer class="bg-light text-center text-lg-start">
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © 2021 Copyright
+            </div>
+        </footer> -->
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+        <script>
+            $(document).ready(function () {
+
+                $("#overview").click(function () {
+                    
+                    let input_data = $("#input_data").val()
+                    if(!input_data) alert("please enter your wallet")
+                  
+                    location.href = '/' + input_data
+                });
+            })
+        </script>
+</body>
+
+</html>
