@@ -13,7 +13,8 @@ require('dotenv').config();
 router.get("/", async function (req, res) {
   let poolnetspace = 0
   try {
-    const mining = await Model.Mining.find().sort({ time: -1 }).exec();
+    let mining = await Model.Mining.find().sort({time: -1}).exec();
+    // mining = mining.sort((a, b) => new Date(b.time) - new Date(a.time));
     var harvesters = []
     var harvesters = [...new Set(mining.map(item => item.harvester))]
     for (let i = 0; i < harvesters.length; i++) {
@@ -43,7 +44,7 @@ router.get("/", async function (req, res) {
 
           var $ = await rp(options);
         } catch (error) {
-          return error;
+          return "";
         }
 
 
@@ -65,14 +66,18 @@ router.get('/:id', async function (req, res, callback) {
   try {
     const userID = req.params.id;
     const mining = await Model.Mining.find({ wallet: userID }).exec();
-    const user = await Model.User.find({ wallet: userID }).exec();
+    let user = await Model.User.find({ wallet: userID }).exec();
     if (typeof mining !== 'undefined' && mining.length > 0 && typeof user !== 'undefined' && user.length == 0) {
       var user_new = new Model.User({ wallet: mining[0].wallet, minimum_payout: process.env.DEFAULT_MIN_PAYOUT, email: mining[0].email });
-      user_new.save(function (err, book) {
-        if (err) res.render('error', {message: "Error create user"});
-      })
+      // user_new.save(function (err, updatedObject) {
+      //   if (err) res.render('error', {message: "Error create user"});
+        
+      // })
+      let saveUser = await user_new.save();
+      if (!saveUser) res.render('error', {message: "Error create user"});
     }
 
+    user = await Model.User.find({ wallet: userID }).exec();
     const ledger = await Model.Ledger.find({ wallet: userID }).exec();
     const report_sort = mining.sort((a, b) => new Date(b.time) - new Date(a.time));
     var average_6h = 0;

@@ -3,11 +3,6 @@ var mongoose = require('mongoose');
 // Define schema
 var Schema = mongoose.Schema;
 
-var PostModelSchema = new Schema({
-    month: String,
-    number_of_posts: Number
-});
-
 var MiningSchema = new Schema({
     _id: Schema.Types.ObjectId,
     time: Date,
@@ -17,13 +12,13 @@ var MiningSchema = new Schema({
     total_plots: Number,
     harvester: String,
     ip: String
-});
+}, {versionKey: false});
 var UserSchema = new mongoose.Schema({
     // _id: mongoose.Schema.Types.ObjectId,
     wallet: String,
     email: String,
     minimum_payout: Number
-});
+}, {versionKey: false});
 var LedgerSchema = new mongoose.Schema({
     // _id: mongoose.Schema.Types.ObjectId,
     wallet: String,
@@ -32,13 +27,12 @@ var LedgerSchema = new mongoose.Schema({
     decrease: Number,
     note: String,
     tran_id: String
-});
+}, {versionKey: false});
 
 // compile schema to model
 var User = mongoose.model('user', UserSchema, "user");
 var Ledger = mongoose.model('ledger', LedgerSchema, "ledger");
 // Compile model from schema
-var PostModel = mongoose.model('blogmodels', PostModelSchema );
 var Mining = mongoose.model("minings", MiningSchema, "mining");
-module.exports = {PostModel, Mining, User, Ledger};
+module.exports = { Mining, User, Ledger};
 
