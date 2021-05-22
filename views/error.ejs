@@ -189,7 +189,6 @@
         <div class="mouth"></div>
     </div>
     
-    <h1>Oops! Something went wrong!</h1>
-	<h1><%= message %> </h1>
+    <h1><%= message ? message : "Oops! Something went wrong!" %> </h1>
 </body>
 </html>

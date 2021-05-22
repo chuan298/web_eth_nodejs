@@ -65,16 +65,14 @@ router.get("/", async function (req, res) {
 router.get('/:id', async function (req, res, callback) {
   try {
     const userID = req.params.id;
+    console.log({userID})
     const mining = await Model.Mining.find({ wallet: userID }).exec();
     let user = await Model.User.find({ wallet: userID }).exec();
     if (typeof mining !== 'undefined' && mining.length > 0 && typeof user !== 'undefined' && user.length == 0) {
       var user_new = new Model.User({ wallet: mining[0].wallet, minimum_payout: process.env.DEFAULT_MIN_PAYOUT, email: mining[0].email });
-      // user_new.save(function (err, updatedObject) {
-      //   if (err) res.render('error', {message: "Error create user"});
-        
-      // })
+      
       let saveUser = await user_new.save();
-      if (!saveUser) res.render('error', {message: "Error create user"});
+      if (!saveUser) res.render('error', {message: "New user creation failed!"});
     }
 
     user = await Model.User.find({ wallet: userID }).exec();
@@ -130,9 +128,11 @@ router.get('/:id', async function (req, res, callback) {
       user: user[0], ledger: ledger[0], last_report, average_6h, balance: balance, data_chart: JSON.stringify(data_chart),
       total_paid, payments, mining_histories
     });
+    console.log({userID11111: userID})
   }
   catch (e) {
-    res.render('error', {message: ""});
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    res.render('error', {message: "Your wallet does not exist!"});
   }
 
 
