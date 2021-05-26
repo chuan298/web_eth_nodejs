@@ -53,7 +53,7 @@ router.get("/", async function (req, res) {
         
       }
       let price = await crawler();
-      res.render('home', { poolnetspace, minings_count, price });
+      res.render('home', { poolnetspace, minings_count, price, minimum_payout: process.env.DEFAULT_MIN_PAYOUT });
   }
   catch (e) {
     console.log(e)
