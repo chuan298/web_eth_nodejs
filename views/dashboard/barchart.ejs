@@ -185,14 +185,14 @@
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                         aria-controls="profile" aria-selected="false">Payments</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
                         aria-controls="contact" aria-selected="false">Minning History</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="calculator-tab" data-toggle="tab" href="#calculator" role="tab"
                         aria-controls="contact" aria-selected="false">Calculator</a>
-                </li>
+                </li> -->
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -206,11 +206,11 @@
                         </colgroup>
                         <thead>
                             <tr style="height: 50px;">
-                                <td colspan="2" style="text-align: center;">Worker</td>
+                                <td colspan="2" style="text-align: center;">ID</td>
                                 <td rowspan="2" style="text-align: center;">Plot number</td>
 
                             </tr>
-                            <tr style="height: 50px;">
+                            <!-- <tr style="height: 50px;">
                                 <td colspan="2">
                                     <div class="d-flex flex-row" style="align-items: center; justify-content: center;">
                                         <button type="button" class="btn btn-light">Online</button>
@@ -219,7 +219,7 @@
                                     </div>
 
                                 </td>
-                            </tr>
+                            </tr> -->
                         </thead>
                         <tbody>
                             <% for(let i=0; i< harvesters.length; i++){ %>
@@ -252,7 +252,7 @@
                             <td colspan="3">
                                 <div class="d-flex flex-row" style="align-items: center; justify-content: center;">
                                     <span>Total paid: <%= total_paid %>  XCH&nbsp;&nbsp;</span>
-                                    <button type="button" class="btn btn-success">CSV</button>
+                                    <!-- <button type="button" class="btn btn-success">CSV</button> -->
 
                                 </div>
                             </td>
