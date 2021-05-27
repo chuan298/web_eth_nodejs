@@ -65,7 +65,6 @@ router.get("/", async function (req, res) {
 router.get('/:id', async function (req, res, callback) {
   try {
     const userID = req.params.id;
-    console.log({userID})
     const mining = await Model.Mining.find({ wallet: userID }).exec();
     let user = await Model.User.find({ wallet: userID }).exec();
     if (typeof mining !== 'undefined' && mining.length > 0 && typeof user !== 'undefined' && user.length == 0) {
@@ -95,14 +94,14 @@ router.get('/:id', async function (req, res, callback) {
     const balance = ledger ? ledger.reduce((a, b) => a + (parseFloat(b.increase).toFixed(11) - parseFloat(b.decrease).toFixed(11) || 0), 0) : 0;
     var harvesters = []
     var harvesters = [...new Set(mining.map(item => item.harvester))]
-    harvesters = harvesters.map((item, index) => {
+    var harvesters_table = harvesters.map((item, index) => {
       return { harvester: item, total_plots: 0, color: colors[index % colors.length] }
     })
     var last_report = 0;
-    for (let i = 0; i < harvesters.length; i++) {
+    for (let i = 0; i < harvesters_table.length; i++) {
       for (let j = 0; j < report_sort.length; j++) {
-        if (harvesters[i].harvester === report_sort[j].harvester) {
-          harvesters[i].total_plots = report_sort[j].total_plots;
+        if (harvesters_table[i].harvester === report_sort[j].harvester) {
+          harvesters_table[i].total_plots = report_sort[j].total_plots;
           last_report += report_sort[j].total_plots;
           break
         }
@@ -119,19 +118,31 @@ router.get('/:id', async function (req, res, callback) {
       return { time: new Date(item.time), amount: item.increase - item.decrease }
     })
     var total_paid = payments ? payments.reduce((a, b) => a + (b.increase - b.decrease || 0), 0) : 0;
-    const data_chart = report_sort.reverse().map((item) => [new Date(item.time).getTime(), item.total_plots])
+
+    /// data chart
+    var data_chart = harvesters.map((item, index) => {
+      return { name: item, data: [], color: colors[index % colors.length] }
+    })
+    var report_sort_ = report_sort.reverse()
+    for (let i = 0; i < data_chart.length; i++) {
+      for (let j = 0; j < report_sort_.length; j++) {
+        if (data_chart[i].name === report_sort_[j].harvester) {
+          data_chart[i].data.push([new Date(report_sort_[j].time).getTime(), report_sort_[j].total_plots]);
+        }
+      }
+    }
+    // console.log(data_chart[0])
+    // const data_chart = report_sort.reverse().map((item) => [new Date(item.time).getTime(), item.total_plots])
     res.render('dashboard/barchart', {
       title: 'My First Bar Chart',
       datai: JSON.stringify([]),
       labeli: JSON.stringify([]),
-      harvesters: harvesters,
+      harvesters: harvesters_table,
       user: user[0], ledger: ledger[0], last_report, average_6h, balance: balance, data_chart: JSON.stringify(data_chart),
       total_paid, payments, mining_histories
     });
-    console.log({userID11111: userID})
   }
   catch (e) {
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     res.render('error', {message: "Your wallet does not exist!"});
   }
 

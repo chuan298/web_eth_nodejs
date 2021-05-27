@@ -171,7 +171,7 @@
             <div class="row">
 
                 <div class="col-lg-12">
-                    <div id="myChart" style="min-width: 400px; max-width: 800px; height: 500px; margin: 0 auto"></div>
+                    <div id="myChart" style="min-width: 400px; max-width: 3000px; height: 500px;"></div>
                 </div>
             </div>
             <br />
@@ -350,10 +350,12 @@
         </div>
     </div>
     <br />
+    <br/>
     <footer class="bg-light text-center text-lg-start">
         <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-            ©Copyright: Chiacoinvn
+        <div class="text-center p-3" style="background-color: #d9ddda;">
+            <h5>For more information, email to <span style="color: #3CAA5B;">support@chiacoinvn.net</span></h5>
+            <h5>©Copyright: Chiacoinvn</h5>
         </div>
         <!-- Copyright -->
     </footer>
@@ -419,14 +421,19 @@
                     //             series.addPoint([x, y], true, true);
                     //         }, 1000);
                     //     }
-                    // }
+                    // },
                     type: 'column'
                 },
                 
                 time: {
-                    useUTC: false
+                    useUTC: true
                 },
-
+                plotOptions: {
+                    series: {
+                        allowPointSelect: true,
+                        groupPadding: 0.1,
+                    }
+                },
                 rangeSelector: {
                     buttons: [
                         {
@@ -460,7 +467,7 @@
                         }
                     ],
                     // inputEnabled: false,
-                    selected: 3
+                    selected: 1
                 },
 
                 title: {
@@ -481,26 +488,29 @@
                     enabled: false
                 },
 
-                series: [{
-                    name: 'total plots',
-                    data: <%- data_chart %>
-                    // (function () {
-                    //     // generate an array of random data
-                    //     var data = [],
-                    //         time = (new Date()).getTime(),
-                    //         i;
+                // series: [{
+                //     name: 'total plots',
+                //     data: 
+                //     //<%- data_chart %>
+                //     (function () {
+                //         // generate an array of random data
+                //         var data = [],
+                //             time = (new Date()).getTime(),
+                //             i;
 
-                    //     for (i = -19; i <= 0; i += 1) {
-                    //         data.push([
-                    //             time + i * 100000,
-                    //             Math.round(Math.random() * 100)
-                    //         ]);
-                    //         // console.log(i)
-                    //     }
-                    //     console.log(data)
-                    //     return data;
-                    // }())
-                }]
+                //         for (i = -19; i <= 0; i += 1) {
+                //             data.push([
+                //                 time + i * 100000,
+                //                 Math.round(Math.random() * 100)
+                //             ]);
+                //             console.log(i)
+                //         }
+                //         console.log(data)
+                //         console.log(<%- data_chart %>)
+                //         return <%- data_chart %>;
+                //     }())
+                // }]
+                series: <%- data_chart %>
             });
 
 
