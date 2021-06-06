@@ -68,7 +68,7 @@ router.get('/:id', async function (req, res, callback) {
     // const mining = await Model.Mining.find({ wallet: userID }).lean().exec();
     const mining = await Model.Mining.aggregate(([
       {'$match': { wallet: userID } }, { $sort: { time: -1 } }
-    ])).exec();
+    ])).allowDiskUse().exec();
     let user = await Model.User.find({ wallet: userID }).lean().exec();
     if (typeof mining !== 'undefined' && mining.length > 0 && typeof user !== 'undefined' && user.length == 0) {
       var user_new = new Model.User({ wallet: mining[0].wallet, minimum_payout: process.env.DEFAULT_MIN_PAYOUT, email: mining[0].email });
