@@ -65,8 +65,11 @@ router.get("/", async function (req, res) {
 router.get('/:id', async function (req, res, callback) {
   try {
     const userID = req.params.id;
-    const mining = await Model.Mining.find({ wallet: userID }).exec();
-    let user = await Model.User.find({ wallet: userID }).exec();
+    // const mining = await Model.Mining.find({ wallet: userID }).lean().exec();
+    const mining = await Model.Mining.aggregate(([
+      {'$match': { wallet: userID } }, { $sort: { time: -1 } }
+    ])).exec();
+    let user = await Model.User.find({ wallet: userID }).lean().exec();
     if (typeof mining !== 'undefined' && mining.length > 0 && typeof user !== 'undefined' && user.length == 0) {
       var user_new = new Model.User({ wallet: mining[0].wallet, minimum_payout: process.env.DEFAULT_MIN_PAYOUT, email: mining[0].email });
       
@@ -74,16 +77,16 @@ router.get('/:id', async function (req, res, callback) {
       if (!saveUser) res.render('error', {message: "New user creation failed!"});
     }
 
-    user = await Model.User.find({ wallet: userID }).exec();
-    const ledger = await Model.Ledger.find({ wallet: userID }).exec();
-    const report_sort = mining.sort((a, b) => new Date(b.time) - new Date(a.time));
+    user = await Model.User.find({ wallet: userID }).lean().exec();
+    const ledger = await Model.Ledger.find({ wallet: userID }).lean().exec();
+    // const report_sort = mining.sort((a, b) => new Date(b.time) - new Date(a.time));
     var average_6h = 0;
     var total = 0;
     var current_time = new Date();
     var number_ = 1;
-    for (let index = 0; index < report_sort.length; index++) {
-      if (Math.abs(current_time - new Date(report_sort[index].time)) / 36e5 < 6) {
-        total += report_sort[index].total_plots;
+    for (let index = 0; index < mining.length; index++) {
+      if (Math.abs(current_time - new Date(mining[index].time)) / 36e5 < 6) {
+        total += mining[index].total_plots;
         number_ += 1;
       }
       else break;
@@ -99,10 +102,10 @@ router.get('/:id', async function (req, res, callback) {
     })
     var last_report = 0;
     for (let i = 0; i < harvesters_table.length; i++) {
-      for (let j = 0; j < report_sort.length; j++) {
-        if (harvesters_table[i].harvester === report_sort[j].harvester) {
-          harvesters_table[i].total_plots = report_sort[j].total_plots;
-          last_report += report_sort[j].total_plots;
+      for (let j = 0; j < mining.length; j++) {
+        if (harvesters_table[i].harvester === mining[j].harvester) {
+          harvesters_table[i].total_plots = mining[j].total_plots;
+          last_report += mining[j].total_plots;
           break
         }
       }
@@ -110,7 +113,7 @@ router.get('/:id', async function (req, res, callback) {
 
     var mining_histories = mining.map(item => {
       return { time: new Date(item.time), amount: item.total_plots }
-    }).sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 10);
+    }).slice(0, 10);
 
 
     var payments = ledger.filter(item => item.increase > 0 && item.tran_id !== "")
@@ -123,7 +126,7 @@ router.get('/:id', async function (req, res, callback) {
     var data_chart = harvesters.map((item, index) => {
       return { name: item, data: [], color: colors[index % colors.length] }
     })
-    var report_sort_ = report_sort.reverse()
+    var report_sort_ = mining.reverse()
     for (let i = 0; i < data_chart.length; i++) {
       for (let j = 0; j < report_sort_.length; j++) {
         if (data_chart[i].name === report_sort_[j].harvester) {
